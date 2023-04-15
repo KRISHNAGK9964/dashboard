@@ -27,7 +27,7 @@ const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 interface dashboardProps {}
 
-const dashboard: React.FC<dashboardProps> = ({}) => {
+const Dashboard: React.FC<dashboardProps> = ({}) => {
   const nextAuthOpt = {
     redirect: false,
   };
@@ -294,5 +294,5 @@ const dashboard: React.FC<dashboardProps> = ({}) => {
   );
 };
 
-export default dashboard;
+export default Dashboard;
 
