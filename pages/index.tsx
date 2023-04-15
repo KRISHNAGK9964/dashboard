@@ -23,6 +23,7 @@ import { Router, useRouter } from "next/router";
 import { NextPageContext } from "next";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
+import Loader from "../Components/Loader";
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 interface dashboardProps {}
@@ -113,13 +114,13 @@ const Dashboard: React.FC<dashboardProps> = ({}) => {
   const router = useRouter();
   const [pieColors, setPieColors] = useState(["#EE8484", "#F6DC7D", "#98D89E"]);
 
-  // useEffect(()=>{
-  //   if(status!=='loading' && !session?.user){
-  //     router.replace('/signin');
-  //   }
-  // },[session])
+  useEffect(()=>{
+    if(status!=='loading' && !session?.user){
+      router.replace('/signin');
+    }
+  },[session])
   
-  // if(!session?.user?.image)return null;
+  if(status === 'loading' || !session?.user)return <Loader />
   return (
     <div className="min-h-screen flex p-4 bg-[#F5F5F5] min-w-max">
       {!isSignedIn ? <div id="oneTap" className="fixed right-0 z-50" /> : null}
