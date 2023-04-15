@@ -1,5 +1,4 @@
 import NextAuth from "next-auth"
-import GithubProvider from "next-auth/providers/github"
 import AppleProvider from "next-auth/providers/apple";
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider  from 'next-auth/providers/credentials';
@@ -45,7 +44,10 @@ export const authOptions = {
     })
     // ...add more providers here
   ],
-  secret: process.env.NEXTAUTH_SECRET
+  secret: process.env.NEXTAUTH_SECRET,
+  pages:{
+    signIn: '/signin',
+  }
 }
 
 export default NextAuth(authOptions);
