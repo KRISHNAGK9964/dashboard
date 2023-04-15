@@ -12,7 +12,7 @@ interface SigninFormData {
   password: string;
 }
 
-const signin: React.FC<signinProps> = ({}) => {
+const Signin: React.FC<signinProps> = ({}) => {
   const{ data: session } = useSession();
   const {
     register,
@@ -107,4 +107,4 @@ const signin: React.FC<signinProps> = ({}) => {
   );
 };
 
-export default signin;
+export default Signin;
