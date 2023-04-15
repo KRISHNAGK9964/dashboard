@@ -113,11 +113,11 @@ const Dashboard: React.FC<dashboardProps> = ({}) => {
   const router = useRouter();
   const [pieColors, setPieColors] = useState(["#EE8484", "#F6DC7D", "#98D89E"]);
 
-  useEffect(()=>{
-    if(status!=='loading' && !session?.user){
-      router.replace('/signin');
-    }
-  },[session])
+  // useEffect(()=>{
+  //   if(status!=='loading' && !session?.user){
+  //     router.replace('/signin');
+  //   }
+  // },[session])
   
   // if(!session?.user?.image)return null;
   return (
