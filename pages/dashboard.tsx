@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   dboard_mark,
   bmarks_mark,
@@ -17,30 +17,11 @@ import {
   arrowr,
 } from "../public";
 import dynamic from "next/dynamic";
-import useGoogleIdentify from "../hooks/useGoogleIdentify.jsx";
-import { useSession } from "next-auth/react";
-import { Router, useRouter } from "next/router";
-import { NextPageContext } from "next";
-import { getServerSession } from "next-auth";
-import { authOptions } from "./api/auth/[...nextauth]";
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 interface dashboardProps {}
 
 const dashboard: React.FC<dashboardProps> = ({}) => {
-  const nextAuthOpt = {
-    redirect: false,
-  };
-  const googleOpt = {
-    prompt_parent_id: "oneTap",
-    isOneTap: true,
-  };
-  const { isSignedIn } = useGoogleIdentify({
-    nextAuthOpt,
-    googleOpt,
-  });
-
-  const{data: session, status} = useSession();
   const [options, setOptions] = useState({
     chart: {
       id: "spline-chart",
@@ -92,7 +73,7 @@ const dashboard: React.FC<dashboardProps> = ({}) => {
     },
   ]);
 
-  const [chartData, setChartData] = useState({
+  const [chartData,setChartData] = useState({
     length: 3,
     series: [14, 31, 55],
     options: {
@@ -101,28 +82,18 @@ const dashboard: React.FC<dashboardProps> = ({}) => {
         width: "100%",
       },
       labels: ["Super Hoodies", "Custom Short", "Basic Tees"],
-      colors: ["#EE8484", "#F6DC7D", "#98D89E"],
+      colors: ["#EE8484","#F6DC7D","#98D89E"],
       dataLabels: {
         enabled: false,
       },
-      legend: {
-        show: false,
+      legend:{
+        show : false,
       },
     },
   });
-  const router = useRouter();
-  const [pieColors, setPieColors] = useState(["#EE8484", "#F6DC7D", "#98D89E"]);
-
-  useEffect(()=>{
-    if(status!=='loading' && !session?.user){
-      router.replace('/signin');
-    }
-  },[session])
-  
-  // if(!session?.user?.image)return null;
+  const [pieColors, setPieColors] = useState(["#EE8484","#F6DC7D","#98D89E"]);
   return (
-    <div className="min-h-screen flex p-4 bg-[#F5F5F5] min-w-max">
-      {!isSignedIn ? <div id="oneTap" className="fixed right-0 z-50" /> : null}
+    <div className="min-h-screen flex p-4 bg-[#F5F5F5]">
       {/* sidebar */}
       <div className="relative  bg-black rounded-[30px] px-8 pr-16">
         <p className="font-bold text-4xl text-white my-14 ">Board.</p>
@@ -181,13 +152,13 @@ const dashboard: React.FC<dashboardProps> = ({}) => {
             <div className="relative w-5 h-5 ">
               <Image src={bell} fill className="" alt="" />
             </div>
-            <div className="relative w-6 h-6 rounded-full overflow-hidden bg-gray-500">
-              {(session?.user?.image) && <Image src={session?.user?.image} fill className="" alt="" />}
+            <div className="relative w-6 h-6 rounded-full overflow-hidden">
+              <Image src={avatar} fill className="" alt="" />
             </div>
           </div>
         </div>
         {/* cards */}
-        <div className="flex justify-between space-x-4 ">
+        <div className="flex justify-between flex-wrap">
           <div className="p-8 bg-[#DDEFE0] rounded-[30px] w-60 space-y-1 ">
             <div className="flex flex-row-reverse ">
               <Image src={revenue} className="h-6 w-7" alt="" />
@@ -219,7 +190,7 @@ const dashboard: React.FC<dashboardProps> = ({}) => {
         </div>
         {/* Line chart */}
 
-        <div className="p-6 px-4 bg-white rounded-3xl overflow-hidden">
+        <div className="p-6 px-4 bg-white border rounded-3xl overflow-hidden">
           {typeof window !== "undefined" && (
             <Chart options={options} series={series} type="line" height="300" />
           )}
@@ -235,27 +206,26 @@ const dashboard: React.FC<dashboardProps> = ({}) => {
               </p>
             </div>
             <div className="flex items-center ">
-              <div className="">
-                <Chart
-                  options={chartData.options}
-                  series={chartData.series}
-                  type="pie"
-                  height="100%"
+                <div className="">
+
+              <Chart
+                options={chartData.options}
+                series={chartData.series}
+                type="pie"
+                height="100%"
                 />
-              </div>
+                </div>
               <div className="flex flex-1 h-auto flex-col justify-between space-y-2">
                 {chartData.series.map((value, index) => (
                   <div key={index} className="flex space-x-4 ">
                     <div className="p-1.5">
                       <div
                         className={`w-3 h-3 rounded-full `}
-                        style={{ backgroundColor: pieColors[index] }}
+                        style={{backgroundColor:pieColors[index]}}
                       ></div>
                     </div>
                     <div>
-                      <p className="font-bold text-sm">
-                        {chartData.options.labels[index]}
-                      </p>
+                      <p className="font-bold text-sm">{chartData.options.labels[index]}</p>
                       <p className="text-xs text-[#858585]">{value}%</p>
                     </div>
                   </div>
@@ -295,4 +265,3 @@ const dashboard: React.FC<dashboardProps> = ({}) => {
 };
 
 export default dashboard;
-
